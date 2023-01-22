@@ -3,7 +3,7 @@
 from Image import *
 
 
-for x in range(17):
+for x in range(26):
     image,gray=Image.read_image(x)
 
     # Compute the gradient magnitude and direction using the Sobel operator

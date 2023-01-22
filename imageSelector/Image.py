@@ -4,6 +4,7 @@ class Image:
 
     def read_image(x):
         # Load the input image
+        #image = cv2.imread("..\\Image_database\\{}.jpg)".format(x))
         image = cv2.imread("C:\\Users\\User\\Desktop\\Image database-project\\{}.jpg".format(x))
 
         # Resize the image

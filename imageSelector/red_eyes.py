@@ -1,31 +1,29 @@
 import cv2
 import face_recognition
+import numpy as np
+
 from Image import *
+def eyes(x):
+    image, gray = Image.read_image(x)
+    # Find all facial features in the image
+    face_landmarks_list = face_recognition.face_landmarks(image)
+    eyes_region = []
 
-for x in range(26):
+    # Loop through each face
+    for face_landmarks in face_landmarks_list:
+        # Get the coordinates of the eyes
+        left_eye = face_landmarks['left_eye']
+        right_eye = face_landmarks['right_eye']
 
-    image,gray=Image.read_image(x)
+        eyes_region.append(image[left_eye[1][1] :left_eye[5][1] , left_eye[1][0] :left_eye[2][0] ])
+        eyes_region.append( image[right_eye[1][1] :right_eye[5][1], right_eye[1][0] :right_eye[2][0] ])
 
-    # Convert the image to grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    for pic in eyes_region:
+        b,r,g=cv2.split(pic)
+        if np.greater(r,b).any() and np.greater(r,g).any():
+            print(x,"red")
 
-    # Detect faces in the image
-    faces = face_recognition.face_locations(gray)
-
-    # Iterate over each face
-    for (x, y, w, h) in faces:
-        # Crop the face
-        face = gray[y:y+h, x:x+w]
-
-        # Detect red eyes in the face
-        eyes = cv2.CascadeClassifier("haarcascade_eye_tree_eyeglasses.xml").detectMultiScale(face)
-
-        # Iterate over each eye
-        for (ex, ey, ew, eh) in eyes:
-            # Draw a rectangle around the red eye
-            cv2.rectangle(image, (x+ex, y+ey), (x+ex+ew, y+ey+eh), (0, 0, 255), 2)
-
-    # Show the image with red eyes detected
-    cv2.imshow("Red Eyes", image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+        #else:
+          #  print("not red")
+for i in range(35):
+    x=eyes(i)

@@ -3,7 +3,7 @@ import face_recognition
 from Image import *
 
 
-image,g=Image.read_image(7)
+image,g=Image.read_image(36)
 # Find all facial features in the image
 face_landmarks_list = face_recognition.face_landmarks(image)
 
