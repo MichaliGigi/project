@@ -36,4 +36,4 @@ def eyes(x):
         cv2.waitKey(0)
     return eyes_region
 for i in range(1):
-    x=eyes(26)
+    x=eyes(12)

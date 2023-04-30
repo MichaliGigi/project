@@ -1,6 +1,6 @@
 # import the necessary packages
 from Libraries import *
-for x in range(21):
+for x in range(36):
     # Read the image file
     image = cv2.imread("C:\\Users\\User\\Desktop\\Image database-project\\{}.jpg".format(x))
 

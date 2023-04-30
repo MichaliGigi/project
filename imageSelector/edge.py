@@ -1,6 +1,6 @@
 from Image import *
 
-for x in range(5,7):
+for x in range(37):
 
     # Read the input image
     image, gray = Image.read_image(x)
@@ -11,6 +11,9 @@ for x in range(5,7):
     # Compute the Canny edge map
     edges = cv2.Canny(gray, 50, 100)
 
-    # Display the result
-    cv2.imshow('edges', edges)
-    cv2.waitKey()
+    # Find contours in the edges
+    contours, hierarchy = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+
+    cv2.imshow("After", edges)
+    cv2.waitKey(0)

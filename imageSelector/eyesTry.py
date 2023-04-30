@@ -39,7 +39,7 @@ def eyes(x):
         else:
             print("left eye is open")
 for i in range(1):
-    eyes(9)
+    eyes(12)
 
 
 

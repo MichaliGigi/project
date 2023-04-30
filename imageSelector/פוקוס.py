@@ -2,7 +2,7 @@
 from Image import *
 
 threshold=750
-for x in range(0,25):
+for x in range(26):
 
     # Load the image and convert it to grayscale
     image,gray = Image.read_image(x)
