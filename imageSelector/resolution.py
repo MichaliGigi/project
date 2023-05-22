@@ -1,8 +1,9 @@
 # import the necessary packages
-from Libraries import *
-for x in range(36):
+
+from Image import *
+for x in range(27):
     # Read the image file
-    image = cv2.imread("C:\\Users\\User\\Desktop\\Image database-project\\{}.jpg".format(x))
+    image,gray = Image.read_image(x)
 
     # Get the width and height of the image
     height, width = image.shape[:2]

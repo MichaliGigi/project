@@ -33,7 +33,7 @@ def eyes(x):
         if counter > num_of_red:
             print("A red eye was found!")
 
-for i in range(37):
+for i in range(27):
     print(i)
     eyes(i)
 

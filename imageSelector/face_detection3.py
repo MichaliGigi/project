@@ -1,5 +1,3 @@
-#מזהה יפה, לפעמים יש זיהויים כוזבים
-# import the necessary packages
 from Image import *
 
 # Load the Haar cascade classifier for detecting faces
@@ -25,3 +23,4 @@ def faces(x):
     cv2.imshow("After NMS", image)
     cv2.waitKey(0)
     return face_region
+faces(29)

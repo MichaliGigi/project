@@ -1,4 +1,4 @@
-from __future__ import print_function #זיהוי דמויות
+from __future__ import print_function  # זיהוי דמויות
 import cv2
 import imutils
 import numpy as np

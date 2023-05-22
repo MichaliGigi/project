@@ -3,7 +3,7 @@ import face_alignment
 import math
 from Image import *
 # Load image
-img,gry = Image.read_image(32)
+img,gry = Image.read_image(31)
 
 # Run face alignment
 fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D)

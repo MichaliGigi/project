@@ -1,6 +1,6 @@
 from Image import *
 
-for x in range(37):
+for x in range(27):
 
     # Read the input image
     image, gray = Image.read_image(x)

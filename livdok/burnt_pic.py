@@ -3,7 +3,7 @@ from PIL import Image
 from Image import *
 
 # Open the image
-im, gray = Image.read_image(38)
+im, gray = Image.read_image(24)
 
 # Convert the image to a numpy array
 im_np = np.array(im)
