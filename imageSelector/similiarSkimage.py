@@ -1,22 +1,45 @@
-from PIL import Image
-import imagehash
+import cv2
 import numpy as np
+from Image import *
 
-def find_similar(dir, similarity=80):
-    hash_size = 8
-    fnames = [1,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,18,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31]
-    threshold = 1 - similarity / 100
-    diff_limit = int(threshold * (hash_size ** 2))
-    img = Image.open(dir).convert('L')
+def calculate_color_score(image):
+    # Resize the image to reduce processing time (optional)
+    resized_image = cv2.resize(image, (200, 200))
 
-    hash1 = imagehash.average_hash(img, hash_size).hash
+    # Convert the image from BGR to RGB
+    rgb_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB)
 
-    for image in fnames:
-        img2 = Image.open("..\\Image_database\\{}.jpg".format(image)).convert('L')
+    # Reshape the image to a 2D array of pixels
+    pixels = rgb_image.reshape((-1, 3))
 
-        hash2 = imagehash.average_hash(img2, hash_size).hash
+    # Convert the pixel values to float32
+    pixels = np.float32(pixels)
 
-        if np.count_nonzero(hash1 != hash2) <= diff_limit:
-            print("{} image found {}% similar to {}".format(image, similarity, dir))
+    # Define the criteria for k-means clustering
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
 
-find_similar("..\\Image_database\\29.jpg", 66)
+    # Set the number of clusters (dominant colors) to extract
+    num_clusters = 8
+
+    # Perform k-means clustering to find the dominant colors
+    _, labels, centers = cv2.kmeans(pixels, num_clusters, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+
+    # Count the occurrences of each label (cluster)
+    counts = np.bincount(labels.flatten())
+
+    # Calculate the percentage of each dominant color in the image
+    color_percentages = counts / len(labels)
+
+    # Calculate the color score as the sum of squared color percentages
+    color_score = np.sum(color_percentages ** 2)
+
+    return color_score
+for i in range(42):
+    # Read the image
+    image, gray = Image.read_image(i)
+
+    # Calculate the color score of the image
+    score = calculate_color_score(image)
+
+    # Print the color score
+    print("picture:",i,"Color score:", score*100)

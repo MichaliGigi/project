@@ -1,10 +1,10 @@
-from face_detection3 import *
+from face import *
 
 
 x= 12
 
 # Read the faces images
-images=faces(x)
+images = Face.face(x)
 arr_of_mean = []
 for face in images:
     # Calculate the average pixel value in one face

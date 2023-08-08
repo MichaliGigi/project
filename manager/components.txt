@@ -1,0 +1,3 @@
+high, resolution
+low, smile
+medium, close_eyes

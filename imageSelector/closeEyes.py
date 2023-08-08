@@ -1,62 +1,58 @@
-
 from Image import *
-def eyes(x):
-    image, gray = Image.read_image(x)
+
+
+def calculate_eye_aspect_ratio(eye):
+    eye = np.array(eye, dtype=np.float32)
+    # Compute the Euclidean distances between the two sets of
+    # vertical eye landmarks (x, y)-coordinates
+    A = np.linalg.norm(eye[1] - eye[5])
+    B = np.linalg.norm(eye[2] - eye[4])
+
+    # Compute the Euclidean distance between the horizontal
+    # eye landmark (x, y)-coordinates
+    C = np.linalg.norm(eye[0] - eye[3])
+
+    # Compute the eye aspect ratio
+    ear = (A + B) / (2.0 * C)
+    return ear
+
+
+def detect_eyes(image_path):
+    image, gray = Image.read_image(image_path)
+
 
     # Find all facial features in the image
     face_landmarks_list = face_recognition.face_landmarks(image)
-    eyes_region = []
+
+    eyes_status = []
 
     # Loop through each face
     for face_landmarks in face_landmarks_list:
-        this_eye = []
         # Get the coordinates of the eyes
         left_eye = face_landmarks['left_eye']
         right_eye = face_landmarks['right_eye']
 
-        this_left_eye = []
-        this_right_eye = []
+        # Calculate the eye aspect ratio for each eye
+        left_ear = calculate_eye_aspect_ratio(left_eye)
+        right_ear = calculate_eye_aspect_ratio(right_eye)
 
-        this_left_eye.append(image[left_eye[1][1] :left_eye[5][1] , left_eye[0][0] :left_eye[1][0] ])
-        this_left_eye.append(image[left_eye[1][1]:left_eye[5][1], left_eye[2][0]:left_eye[3][0]])
-        this_right_eye.append( image[right_eye[1][1] :right_eye[5][1], right_eye[0][0] :right_eye[1][0] ])
-        this_right_eye.append(image[right_eye[1][1]:right_eye[5][1], right_eye[2][0]:right_eye[3][0]])
+        # Define the threshold for closed eyes
+        ear_threshold = 0.2
 
-        this_left_eye.append(image[left_eye[1][1]:left_eye[5][1], left_eye[1][0]:left_eye[2][0]])
-        this_right_eye.append(image[right_eye[1][1]:right_eye[5][1], right_eye[1][0]:right_eye[2][0]])
+        # Determine the status of each eye (open or closed)
+        left_eye_status = "Open" if left_ear > ear_threshold else "Closed"
+        right_eye_status = "Open" if right_ear > ear_threshold else "Closed"
 
-        this_eye.append(this_left_eye)
-        this_eye.append(this_right_eye)
-        eyes_region.append(this_eye)
-
-
-    for pic in eyes_region:
-        for eye in pic:
+        eyes_status.append((left_eye_status, right_eye_status))
+    return eyes_status
 
 
-            # Splitting the images into B, G, R channels
-            b0, g0, r0 = cv2.split(eye[0])
-            b1, g1, r1 = cv2.split(eye[1])
-            b2, g2, r2 = cv2.split(eye[2])
-
-            # Calculating the average color values for each channel
-            avg_b = (np.mean(b0) + np.mean(b1)) / 2.0
-            avg_bb = np.mean(b2)
-            avg_g = (np.mean(g0) + np.mean(g1)) / 2.0
-            avg_gg = np.mean(g2)
-            avg_r = (np.mean(r0) + np.mean(r1)) / 2.0
-            avg_rr = np.mean(r2)
-
-            # Checking if the average color values are close or different
-            threshold = 10  # Define a threshold value to determine closeness
-            print("Average color values: ", abs(avg_b - avg_bb), abs(avg_r-avg_rr), abs(avg_g-avg_gg))
-          #  print("pupil: ", avg_bb, avg_gg, avg_rr)
-            if abs(avg_b - avg_bb) < threshold and abs(avg_r-avg_rr) < threshold and abs(avg_g-avg_gg) < threshold:
-                print("The average colors are close.")
-            else:
-                print("The average colors are different.")
-
-
-for i in range(30):
+# Call the function with the image path
+for i in range(42):
     print(i)
-    eyes(i)
+    eyes_status = detect_eyes(i)
+
+    for status in eyes_status:
+        left_eye_status, right_eye_status = status
+        print("Left eye:", left_eye_status)
+        print("Right eye:", right_eye_status)
