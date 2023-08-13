@@ -3,8 +3,8 @@
 from Image import *
 
 threshold=750
-for x in range(42,44):
-
+for x in range(2,44):
+    print(x)
     # Load the image and convert it to grayscale
     image,gray = Image.read_image(x)
 
@@ -16,11 +16,10 @@ for x in range(42,44):
     # Calculate the focus measure using the gradient magnitude
     focus_measure = cv2.Laplacian(magnitude, cv2.CV_64F).var()
     print("Focus measure: {}".format(focus_measure))
+
     # Determine if the image is in focus
     if focus_measure > threshold:
         print("The image is in focus")
     else:
         print("The image is not in focus")
 
-    cv2.imshow("f", image)
-    cv2.waitKey(0)

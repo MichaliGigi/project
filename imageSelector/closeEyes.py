@@ -45,14 +45,23 @@ def detect_eyes(image_path):
 
         eyes_status.append((left_eye_status, right_eye_status))
     return eyes_status
+def cal_grade(i):
+
+    eyes_status = detect_eyes(i)
+    if (len(eyes_status)==0):
+        return 100
+    counter = 0
+    for status in eyes_status:
+        left_eye_status, right_eye_status = status
+        if left_eye_status == "Open":
+            counter += 1
+        if right_eye_status == "Open":
+            counter += 1
+    grade = counter / (len(eyes_status) * 2)*100
+    return grade
 
 
 # Call the function with the image path
 for i in range(42):
     print(i)
-    eyes_status = detect_eyes(i)
-
-    for status in eyes_status:
-        left_eye_status, right_eye_status = status
-        print("Left eye:", left_eye_status)
-        print("Right eye:", right_eye_status)
+    print("grade" +str(cal_grade(i)))
