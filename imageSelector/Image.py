@@ -2,10 +2,10 @@
 from Libraries import *
 class Image:
 
-    def read_image(x):
+    def read_image(path):
         # Load the input image
         #image = cv2.imread("..\\Image_database\\{}.jpg)".format(x))
-        image = cv2.imread("..\\Image_database\\{}.jpg".format(x), cv2.COLOR_BGR2RGB)
+        image = cv2.imread(path, cv2.COLOR_BGR2RGB)
         # Resize the image
         image = imutils.resize(image, width=min(1000, image.shape[1]))
 

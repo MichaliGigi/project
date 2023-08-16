@@ -50,3 +50,6 @@ class FinalGrade:
                 component, grade = line.strip().split(', ')
                 self.gradeComponents[component].append(grade)
 
+
+x=FinalGrade()
+

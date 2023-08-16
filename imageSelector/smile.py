@@ -21,6 +21,8 @@ def detect_smiles(x):
             print("Smiling face detected!")
 
 
-for i in range(27):
-    print(i)
-    detect_smiles(i)
+# for i in range(27):
+#     print(i)
+#     detect_smiles(i)
+detect_smiles(80)
+
