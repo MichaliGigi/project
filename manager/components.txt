@@ -1,3 +1,8 @@
 high, resolution
-low, smile
-medium, close_eyes
+high, eyes closed
+high, brightness faces
+high, hair
+low, face direction
+medium, smile
+medium, red eyes
+medium, focus

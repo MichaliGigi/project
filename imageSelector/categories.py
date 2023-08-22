@@ -1,62 +1,40 @@
-import csv
-import os
 
-from Image import *
-
-titles={"path":0}
+from imageSelector.Image import *
 
 
-def compute_histogram(image):
-    hist = cv2.calcHist([image], [0], None, [256], [0, 256])
-    hist = cv2.normalize(hist, hist).flatten()
-    return hist
+class Categories:
+    def __init__(self):
+        self.groups = []
 
-def compare_histograms(hist1, hist2, method=cv2.HISTCMP_CORREL):
-    return cv2.compareHist(hist1, hist2, method)
+    def fillCategory(self, image):
+        _, gray = image.get_image()
 
+        hist = self.compute_histogram(gray)
 
-def divide_groups():
+        correlations = []
+        # compare image1 with all images in groups
+        for i, group in enumerate(self.groups):
+            correlations.append(self.compare_histograms(hist, group))
+            #correlation = self.compare_histograms(hist, group)
+           # print(correlation)
+            #if correlation > 0.4:
+             #   return i
+        if len(correlations) > 0 and max(correlations) > 0.3:
+            return correlations.index(max(correlations))
+        else:
+            self.groups.append(hist)
+            return len(self.groups) - 1
 
-    script_path = os.path.dirname(os.path.abspath(__file__))
+    def compute_histogram(self, image):
+        hist = cv2.calcHist([image], [0], None, [256], [0, 256])
+        hist = cv2.normalize(hist, hist).flatten()
+        return hist
 
-    # Construct the full path to the CSV file using os.path.join
-    csv_file_path = os.path.join(script_path, '..', 'manager', 'images_info.csv')
-    # open the csv file to read and write
+    def compare_histograms(self, hist1, hist2, method=cv2.HISTCMP_CORREL):
+        return cv2.compareHist(hist1, hist2, method)
 
-
-
-        csvreader = csv.reader(csvfile)
-        next(csvreader)
-        # define const name for row[0]
-        for row in csvreader:
-            image, gray = Image.read_image(row[titles["path"]])
-            hist = compute_histogram(gray)
-
-            # compare image1 with all images in groups
-            for group in groups:
-                correlation = compare_histograms(hist, group[0][1])
-                print (correlation)
-
-                if correlation>0.3:
-                    group.append((i, hist))
-                    break
-            else:
-                groups.append([(i, hist)])
-
-
-image1, gray1 = Image.read_image("C:\\Users\\User\\PycharmProjects\\finalproject\\Image_database\\9.jpg")
-
-# enter the first image to group 1
-groups = [[compute_histogram(gray1)]]
-
-divide_groups()
-
-
-i=0
-for group in groups:
-    print(f"Group {i}: ", end="")
-    for image in group:
-        print(image[0], end=" ")
-    i+=1
-
-
+# c=Categories()
+# print(c.fillCategory(Image("C:\\Users\\User\\Downloads\\x\\1691584607348.jpg")))
+# print(c.fillCategory(Image("C:\\Users\\User\\Downloads\\x\\IMG-20230816-WA0048.jpg")))
+# print(c.fillCategory(Image("C:\\Users\\User\\Downloads\\x\\IMG-20230816-WA0062.jpg")))
+# print(c.fillCategory(Image("C:\\Users\\User\\Downloads\\x\\IMG-20230816-WA0095.jpg")))

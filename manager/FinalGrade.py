@@ -1,20 +1,14 @@
+import os
+
+
 class FinalGrade:
     File = "components.txt"
 
-    def __init__(self, url):
-        self.url = url
-        self.grade = 0
+    def __init__(self):
         # 0: most important, 1: medium, 2: less important
         self.importance = [60, 25, 15]  # default
         self.gradeComponents = {"high": [], "medium": [], "low": []}  # default
         self.read_components_from_file()
-    # ==============================
-    def get_grade(self):
-        return self.grade
-
-    # ==============================
-    def set_grade(self, grade):
-        self.grade = grade
 
     # ==============================
     def set_importance(self, importance):
@@ -38,18 +32,32 @@ class FinalGrade:
         return True
 
     # ==============================
-    def calculate_final_grade(self):
-        for grade_list, importance in zip(self.gradeComponents.values(), self.importance):
-            for component in grade_list:
-                self.grade += component.get_grade() * importance / 100
+    def calculate_final_grade(self, new_row_data):
+        final_grade = 0
+
+        grades_values = [[],[] ,[]]
+        for category, grade in new_row_data.items():
+            for importance_index, category_list in enumerate(self.gradeComponents.values()):
+                if category in category_list:
+                    grades_values[importance_index].append(grade)
+
+                    break  # Break the loop once the category is found
+
+        for importance_index, grade_list in enumerate(grades_values):
+            final_grade+= sum(grade_list)/len(grade_list) * self.importance[importance_index] / 100
+
+        return final_grade
 
     # ==============================
     def read_components_from_file(self):
-        with open(self.File, 'r') as file:
+        script_path = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(script_path, '..', 'manager', self.File)
+        with open(path, 'r') as file:
             for line in file:
                 component, grade = line.strip().split(', ')
                 self.gradeComponents[component].append(grade)
 
 
-x=FinalGrade()
+
+
 

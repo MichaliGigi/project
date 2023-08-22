@@ -1,28 +1,36 @@
-from face import *
+from imageSelector.ImageQuality import *
 
 
-def detect_smiles(x):
-    # Load the cascade for detecting faces
-    faces = Face.face(x)
+class Smile(ImageQuality):
+    def __init__(self):
+        super(Smile, self).__init__()
 
-    # Iterate through detected faces
-    for face in faces:
-        # Extract the face region
+    def calculateGrade(self, image):
+        # Load the cascade for detecting faces
+        faces = image.get_faces()
+        # i, gray = image.get_image()
+        # # Load the smile cascade classifier
+        # smile_cascade = cv2.CascadeClassifier("..\\imageSelector\\haarcascade_smile.xml")
+        #
+        # # Detect smiles in the face region
+        # x= len(smile_cascade.detectMultiScale(fa, scaleFactor=1.7, minNeighbors=22, minSize=(25, 25)))
 
+        if len(faces) == 0:
+            return 100
 
-        # Load the smile cascade classifier
-        smile_cascade = cv2.CascadeClassifier( "haarcascade_smile.xml")
+        amount_of_smiles = 0
+        # Iterate through detected faces
+        for face in faces:
+            # Extract the face region
 
-        # Detect smiles in the face region
-        smiles = smile_cascade.detectMultiScale(face, scaleFactor=1.7, minNeighbors=22, minSize=(25, 25))
+            # Load the smile cascade classifier
+            smile_cascade = cv2.CascadeClassifier("..\\imageSelector\\haarcascade_smile.xml")
 
-        # Check if any smiles are detected
-        if len(smiles) > 0:
-            print("Smiling face detected!")
+            # Detect smiles in the face region
+            if len(smile_cascade.detectMultiScale(face, scaleFactor=1.7, minNeighbors=22, minSize=(25, 25)))>0:
+                amount_of_smiles += 1
+        print("smile grade: ", amount_of_smiles / (len(faces))*100)
+        return amount_of_smiles / (len(faces))*100
 
-
-# for i in range(27):
-#     print(i)
-#     detect_smiles(i)
-detect_smiles(80)
-
+u=Smile()
+print(u.calculateGrade(Image("C:\\Users\\User\\Desktop\\Database\\IMG_0966.JPG")))

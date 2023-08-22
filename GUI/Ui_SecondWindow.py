@@ -11,7 +11,7 @@ class Ui_SecondWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-       # MainWindow.setStyleSheet("background-color: white;")
+        # MainWindow.setStyleSheet("background-color: white;")
         MainWindow.resize(1331, 820)
         MainWindow.setMinimumSize(QtCore.QSize(1331, 820))
         MainWindow.setMaximumSize(QtCore.QSize(1331, 820))
@@ -53,14 +53,15 @@ class Ui_SecondWindow(object):
                 # check in image_data that the category number is not already present
                 if not any(d['category'] == int(row[1]) for d in self.image_data):
                     self.image_data.append({'image_path': row[0], 'category': int(row[1])})
-        #close the csv file
+        # close the csv file
         csvfile.close()
 
-        self.show_image( self.image_data)
+        self.show_image(self.image_data)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
     def show_image_event(self):
         # Create and arrange widgets in the gridLayoutWidget
         row = 0
@@ -74,11 +75,16 @@ class Ui_SecondWindow(object):
             button_layout = QtWidgets.QHBoxLayout()  # Create a horizontal layout for buttons
 
             delete_button = QtWidgets.QPushButton(f"Delete", self.centralwidget)
+            delete_button.setMouseTracking(True)
+            delete_button.setStyleSheet("background-color: rgb(205,0,142); color: white; border-radius: 10px; font-size: 20px;")
             delete_button.clicked.connect(lambda checked, num=category: self.delete_img(num))  # Pass the event number
             button_layout.addWidget(delete_button)  # Add the delete button to the layout
 
             change_button = QtWidgets.QPushButton(f"Change", self.centralwidget)
-            change_button.clicked.connect(lambda checked, num=category,sub=sub_category: self.change_img(num,sub))  # Pass the event number
+            change_button.setMouseTracking(True)
+            change_button.setStyleSheet("background-color: rgb(205,0,142); color: white; border-radius: 10px; font-size: 20px;")
+            change_button.clicked.connect(
+                lambda checked, num=category, sub=sub_category: self.change_img(num, sub))  # Pass the event number
             button_layout.addWidget(change_button)  # Add the change button to the layout
 
             self.eventsLayout.addLayout(button_layout, row + 1, col)  # Add the button layout to the grid layout
@@ -89,10 +95,13 @@ class Ui_SecondWindow(object):
                 row += 2
         # After adding all the image widgets, create a button widget
         button = QtWidgets.QPushButton("Save", self.centralwidget)
+        button.setMouseTracking(True)
+        button.setStyleSheet("background-color: rgb(24,0,139); color: white; border-radius: 10px;   font-size: 20px;")
         button.clicked.connect(self.save)  # Connect the button to a function
 
         # Add the button to the layout
         self.eventsLayout.addWidget(button, row, col)
+
     def save(self):
 
         # get the folder path where the images are stored
@@ -145,15 +154,14 @@ class Ui_SecondWindow(object):
         self.eventsLayout.addWidget(self.pushButton_2, 2, 0)  # Add second button at row 2, column 0
 
     def go_back(self):
-        #clear the grid layout
+        # clear the grid layout
         self.clearGridLayout()
-        #show the images again
+        # show the images again
         self.show_image(self.image_data)
+
     def close(self):
-        #close the application
+        # close the application
         sys.exit()
-
-
 
     def delete_img(self, num):
         # Delete the image from self.selected_image
@@ -165,7 +173,8 @@ class Ui_SecondWindow(object):
         # Update the grid layout with the remaining images
         self.show_image_event()
 
-    def change_img(self, num,sub):
+    def change_img(self, num, sub):
+        print("category: ", num, "sub category: ", sub)
         # Clear the grid layout
         self.clearGridLayout()
         # get all the images the in same category and the same sub category from the csv file
@@ -175,10 +184,12 @@ class Ui_SecondWindow(object):
             next(self.csvreader)
             for row in self.csvreader:
                 if int(row[1]) == num and int(row[2]) == sub:
+                    print(row[0])
                     image_data.append({'image_path': row[0], 'category': int(row[1]), 'sub category': int(row[2])})
         csvfile.close()
-        self.change_selected_img(num,image_data)
-    def change_selected_img(self,num,image_data):
+        self.change_selected_img(num, image_data)
+
+    def change_selected_img(self, num, image_data):
         # Create and arrange widgets in the gridLayoutWidget
         row = 0
         col = 0
@@ -187,7 +198,8 @@ class Ui_SecondWindow(object):
             category = data['category']
             sub_category = data['sub category']
             radio_button = QtWidgets.QRadioButton("", self.centralwidget)
-            radio_button.clicked.connect(lambda checked, path=image_path,cat=category,sub=sub_category: self.select(path,cat,sub))
+            radio_button.clicked.connect(
+                lambda checked, path=image_path, cat=category, sub=sub_category: self.select(path, cat, sub))
 
             image_label = self.showImg(image_path, row, col)  # Call your showImg function and get the image label
             # Create a vertical layout for the cell
@@ -209,27 +221,27 @@ class Ui_SecondWindow(object):
                 col = 0
                 row += 2
         # After adding all the image widgets, create a button widget
-        button = QtWidgets.QPushButton("Save Change", self.centralwidget)
-        button.clicked.connect(lambda checked,  cat=category:self.submit_button_clicked(cat))  # Connect the button to a function
+        save_button = QtWidgets.QPushButton("Save Change", self.centralwidget)
+        save_button.setMouseTracking(True)
+        save_button.setStyleSheet(
+            "background-color: rgb(24,0,139); color: white; border-radius: 10px;   font-size: 20px;")
+
+        save_button.clicked.connect(lambda checked, cat=category: self.submit_button_clicked(cat))  # Connect the button to a function
 
         # Add the button to the layout
-        self.eventsLayout.addWidget(button, row, col)
+        self.eventsLayout.addWidget(save_button, row, col)
 
-    def submit_button_clicked(self,category):
+    def submit_button_clicked(self, category):
         self.clearGridLayout()
 
         self.show_image_event()
 
-
-    def select(self,path,cat,sub):
+    def select(self, path, cat, sub):
         # replace the image in self.selected_image that have the same category and sub category with the new image
         for data in self.selected_image:
             if data['category'] == cat and data['sub category'] == sub:
                 data['image_path'] = path
                 break
-
-
-
 
     def show_image(self, image_data):
 
@@ -241,10 +253,14 @@ class Ui_SecondWindow(object):
             category = data['category']
 
             self.showImg(image_path, row, col)
-            button = QtWidgets.QPushButton(f"Event {category}", self.centralwidget)
-            button.clicked.connect(lambda checked, num=category: self.showEventImg(num))  # Pass the event number
+            event_button = QtWidgets.QPushButton(f"Event {category}", self.centralwidget)
+            event_button.setMouseTracking(True)
+            event_button.setStyleSheet(
+                "background-color: rgb(205,0,142); color: white; border-radius: 10px; font-size: 20px;")
 
-            self.eventsLayout.addWidget(button, row + 1, col)
+            event_button.clicked.connect(lambda checked, num=category: self.showEventImg(num))  # Pass the event number
+
+            self.eventsLayout.addWidget(event_button, row + 1, col)
 
             col += 1
             if col >= 3:  # Display 3 columns, then move to the next row
@@ -287,7 +303,7 @@ class Ui_SecondWindow(object):
 
     def showEventImg(self, category):
         self.clearGridLayout()
-
+        print("category: ", category)
         # Reopen the CSV file
         with open(self.csv_file_path, 'r') as csvfile:
             self.csvreader = csv.reader(csvfile)
@@ -297,7 +313,10 @@ class Ui_SecondWindow(object):
             for row in self.csvreader:
                 if int(row[1]) == category:
                     if not any(d['sub category'] == int(row[2]) for d in self.selected_image):
-                        self.selected_image.append({'image_path': row[0],'category':int(row[1]), 'sub category': int(row[2]), 'final grade': int(row[11])})
+                        print(row[0])
+                        self.selected_image.append(
+                            {'image_path': row[0], 'category': int(row[1]), 'sub category': int(row[2]),
+                             'final grade': int(row[11])})
                     else:
                         for i in self.selected_image:
                             if i['sub category'] == int(row[2]):
@@ -308,6 +327,3 @@ class Ui_SecondWindow(object):
             self.show_image_event()
             # Close the CSV file
             csvfile.close()
-
-
-

@@ -8,15 +8,15 @@ class File_manager():
         self.csv_file_path = os.path.join(self.script_path, '..', 'manager', self.file_name)
 
     def read_csv_file(self):
-        df = pd.read_csv('data.csv')
+        df = pd.read_csv(self.csv_file_path)
 
-        # open the csv file to read and write
-        with open(self.csv_file_path, 'r') as csvfile:
-            csvreader = csv.reader(csvfile)
-            next(csvreader)
-        return csvreader
+        # # open the csv file to read and write
+        # with open(self.csv_file_path, 'r') as csvfile:
+        #     csvreader = csv.reader(csvfile)
+        #     next(csvreader)
+        return df
 
-    def write_to_csv(self):
-        with open(self.csv_file_path, 'a', newline='') as csvfile:
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(["path", "grade", "category"])
+    def write_to_csv(self,df):
+        # Write the updated DataFrame back to the CSV file
+        df.to_csv(self.csv_file_path, index=False)
+
