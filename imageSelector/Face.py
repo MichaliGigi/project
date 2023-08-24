@@ -22,4 +22,5 @@ class Face:
     def face_landmarks(self):
         # Find all facial features in the image
         face_landmarks_list = face_recognition.face_landmarks(self.image)
+
         return face_landmarks_list

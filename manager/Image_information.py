@@ -19,14 +19,14 @@ from manager.FinalGrade import FinalGrade
 
 
 class Image_information():
-    def __init__(self, url_folder):
+    def __init__(self, url_folder,final_grade):
         self.file = File_manager()
         self.url_folder = url_folder
         self.get_images_in_folder()
 
         self.category=Categories()
         self.sub_category =SubCategoryByFaces()
-        self.final_grade=FinalGrade()
+        self.final_grade=final_grade
         self.Info_Categories = {
                                 "smile": Smile(),
                                 "red eyes": Red_eyes(),
@@ -61,9 +61,10 @@ class Image_information():
     def fill_information(self):
 
         data = []
-
+        xj = 0
         # Run on all images in the folder
         for image_path in self.images_path:
+            print("number of images: ", xj)
             # Create a new row to add to the image information
             new_row_data = {"Image path": image_path}
 
@@ -82,6 +83,9 @@ class Image_information():
             new_row_data["Final grade"] = int(round(self.final_grade.calculate_final_grade(grades_values)))
 
             data.append(new_row_data)
+            xj += 1
+
+
         print(data)
         # Create a pandas DataFrame from the data
         df = pd.DataFrame(data)

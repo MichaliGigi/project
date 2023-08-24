@@ -4,11 +4,11 @@ import os
 class FinalGrade:
     File = "components.txt"
 
-    def __init__(self):
+    def __init__(self, gradeComponents):
         # 0: most important, 1: medium, 2: less important
         self.importance = [60, 25, 15]  # default
-        self.gradeComponents = {"high": [], "medium": [], "low": []}  # default
-        self.read_components_from_file()
+        self.gradeComponents = gradeComponents
+        # self.read_components_from_file()
 
     # ==============================
     def set_importance(self, importance):
@@ -49,13 +49,13 @@ class FinalGrade:
         return final_grade
 
     # ==============================
-    def read_components_from_file(self):
-        script_path = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(script_path, '..', 'manager', self.File)
-        with open(path, 'r') as file:
-            for line in file:
-                component, grade = line.strip().split(', ')
-                self.gradeComponents[component].append(grade)
+    # def read_components_from_file(self):
+    #     script_path = os.path.dirname(os.path.abspath(__file__))
+    #     path = os.path.join(script_path, '..', 'manager', self.File)
+    #     with open(path, 'r') as file:
+    #         for line in file:
+    #             component, grade = line.strip().split(', ')
+    #             self.gradeComponents[component].append(grade)
 
 
 

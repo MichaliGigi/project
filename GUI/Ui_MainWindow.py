@@ -53,11 +53,9 @@ class Ui_MainWindow(object):
         self.select_folder_button.clicked.connect(self.selectFolderClicked)
 
     def openSecondWindow(self):
-        fillImagesInfo = Image_information(self.folder_path)
-        fillImagesInfo.fill_information()
 
         self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_SecondWindow()
+        self.ui = Ui_SecondWindow(self.folder_path)
         self.ui.setupUi(self.window)
         self.window.show()
         self.main_window.close()

@@ -31,7 +31,7 @@ class Hair(ImageQuality):
             precen = dark_pixel_count / (dark_pixel_count + light_pixel_count)
             if precen > 0.3:
                 amount_of_faces_covered_hair += 1
-        return amount_of_faces_covered_hair / len(face_locations)*100
+        return 100-amount_of_faces_covered_hair / len(face_locations)*100
 
             #cv2.rectangle(im, (left, top), (right, bottom), (0, 255, 0), 2)
 

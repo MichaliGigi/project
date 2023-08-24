@@ -8,12 +8,12 @@ class Red_eyes(ImageQuality):
 
     def calculateGrade(self, image):
         # Find all facial features in the image
-        eyes_region = image.get_eyes_region()
-        if len(eyes_region) == 0:
+        pupil_region = image.get_pupil_region()
+        if len(pupil_region) == 0:
             return 100
         amount_of_red = 0
         # Loop through each eye
-        for pic in eyes_region:
+        for pic in pupil_region:
             b, g, r = cv2.split(pic)
             tolerance = 50
             counter = 0
@@ -27,7 +27,5 @@ class Red_eyes(ImageQuality):
                         counter += 1
             if counter > num_of_red:
                 amount_of_red += 1
-        return 100-(amount_of_red/(len(eyes_region)*100))
-
-
+        return 100-(amount_of_red/(len(pupil_region)*100))
 

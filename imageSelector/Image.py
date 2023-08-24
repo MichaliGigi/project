@@ -11,7 +11,17 @@ class Image:
         face=Face(self.image,self.gray)
         self.faces,self.face_location = face.face_rec()
         self.face_landmarks = face.face_landmarks()
-        self.eyes_region,self.eyes_landmarks=Eyes(self.face_landmarks,self.image).eyes()
+
+        self.rect_lips=[]
+        for face in self.face_landmarks:
+            # cut the image between the lips points
+            self.rect_lips.append(self.gray[face['top_lip'][4][1]:face['bottom_lip'][8][1],
+                        face['top_lip'][2][0]:face['bottom_lip'][10][0]])
+
+
+
+        self.pupil_region,self.eyes_landmarks=Eyes(self.face_landmarks,self.image).eyes()
+
 
 
     def read_image(self):
@@ -28,6 +38,8 @@ class Image:
 
             # Convert the image to grayscale
             self.gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+
+
             print("Image read successfully--" + str(self.path))
 
         except Exception as e:
@@ -41,11 +53,17 @@ class Image:
         return self.face_landmarks
     def get_path(self):
         return self.path
-    def get_eyes_region(self):
-        return self.eyes_region
+    def get_pupil_region(self):
+        return self.pupil_region
     def get_eyes_landmarks(self):
         return self.eyes_landmarks
     def get_original_image(self):
         return self.original_image
     def get_face_location(self):
         return self.face_location
+    def get_rect_lips(self):
+        return self.rect_lips
+
+
+
+#w=Image("C:\\Users\\User\\Downloads\\x\\6P1A2540.jpg")
