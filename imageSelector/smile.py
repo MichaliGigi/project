@@ -7,13 +7,15 @@ class Smile(ImageQuality):
 
     def calculateGrade(self, image):
         lips=image.get_rect_lips()
+        if len(lips) == 0:
+            return 100
 
         # # Load the cascade for detecting faces
         #faces = image.get_faces()
         amount_of_smiles = 0
         for lip in lips:
             precent= self.calculate_bright_pixel_percentage(lip)
-            if precent > 10:
+            if precent > 30:
                 amount_of_smiles += 1
 
         # # i, gray = image.get_image()
@@ -42,7 +44,6 @@ class Smile(ImageQuality):
     def calculate_bright_pixel_percentage(self,image):
         total_pixels = image.size
         if total_pixels == 0:
-
             return 0
         mask = (image > 150).astype(int)  # Create binary mask
         bright_pixel_count = cv2.countNonZero(mask)
@@ -50,4 +51,7 @@ class Smile(ImageQuality):
         bright_pixel_percentage = (bright_pixel_count / total_pixels) * 100
         return bright_pixel_percentage
 
-
+# x=Smile()
+# print(x.calculateGrade(Image("C:\\Users\\User\\Downloads\\1691584607326.jpg")))
+# print(x.calculateGrade(Image("C:\\Users\\User\\Downloads\\IMG-20230816-WA0093.jpg")))
+# print(x.calculateGrade(Image("C:\\Users\\User\\Downloads\\ragh\\IMG-20230816-WA0075.jpg")))

@@ -1,6 +1,6 @@
 
 from imageSelector.Image import *
-
+import matplotlib.pyplot as plt
 
 class Categories:
     def __init__(self):
@@ -40,7 +40,6 @@ class Categories:
 
         hist = self.compute_histogram(image_rgb)
 
-
         correlations = []
         # compare image1 with all images in groups
         for i, group in enumerate(self.groups):
@@ -65,4 +64,8 @@ class Categories:
         print(f"Chi-Squared Distance between the histograms: {chi_squared_distance}")
         return chi_squared_distance
         #return cv2.compareHist(hist1, hist2, method)
-
+#
+# x=Categories()
+# #x.fillCategory(Image("C:\\Users\\User\\Downloads\\esrim\\6P1A2901.jpg"))
+# #x.fillCategory(Image("C:\\Users\\User\\Downloads\\esrim\\IMG-20230816-WA0093.jpg"))
+# x.fillCategory(Image("C:\\Users\\User\\Downloads\\59.jpg"))

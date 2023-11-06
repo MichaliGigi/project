@@ -2,6 +2,7 @@
 from Libraries import *
 from imageSelector.Face import Face
 from imageSelector.Eyes import Eyes
+from imageSelector.Lips import Lips
 
 
 class Image:
@@ -12,12 +13,7 @@ class Image:
         self.faces,self.face_location = face.face_rec()
         self.face_landmarks = face.face_landmarks()
 
-        self.rect_lips=[]
-        for face in self.face_landmarks:
-            # cut the image between the lips points
-            self.rect_lips.append(self.gray[face['top_lip'][4][1]:face['bottom_lip'][8][1],
-                        face['top_lip'][2][0]:face['bottom_lip'][10][0]])
-
+        self.rect_lips=Lips(self.face_landmarks,self.gray).getLips()
 
 
         self.pupil_region,self.eyes_landmarks=Eyes(self.face_landmarks,self.image).eyes()
@@ -45,6 +41,7 @@ class Image:
         except Exception as e:
             print("Something went wrong while reading the image--" + str(self.path))
 
+
     def get_image(self):
         return self.image,self.gray
     def get_faces(self):
@@ -65,5 +62,3 @@ class Image:
         return self.rect_lips
 
 
-
-#w=Image("C:\\Users\\User\\Downloads\\x\\6P1A2540.jpg")

@@ -23,18 +23,20 @@ class FaceDirection(ImageQuality):
             distance_left = self.euclidean_distance(left_lip_point, left_cheek_point)
             distance_right = self.euclidean_distance(right_lip_point, right_cheek_point)
 
-            # Calculate the score based on the distance between the lips and cheeks
-            if (max(float(distance_left.real), float(distance_right.real)) / min(float(distance_left.real),
-                                                                                 float(distance_right.real)) < 2.5):
+            # if the face look straight or the nose[0] is in the central  1/5 of the image
+            if (max(float(distance_left.real), float(distance_right.real)) / min(float(distance_left.real),float(distance_right.real)) < 2.5 or
+                    (im.shape[1] / 5)*2 < nose_point[0] < (im.shape[1] / 5) * 3):
                 grade += 100
             else:
-                image_width = im.shape[1] / 2
 
+                image_width = im.shape[1] / 2
+                # cheak if the face is in the left or right side of the image
                 if distance_left.real < distance_right.real:
                     # Calculate the score based on nose position
                     if nose_point[0] <= image_width:
                         grade += 100 - (100 * nose_point[0] / (image_width))
                     else:
+                        #
                         grade += 100
                 else:
                     # Calculate the score based on nose position
@@ -52,3 +54,4 @@ class FaceDirection(ImageQuality):
     # Calculate the Euclidean distance between two points
     def euclidean_distance(self, point1, point2):
         return sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
+

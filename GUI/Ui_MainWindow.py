@@ -14,6 +14,7 @@ class Ui_MainWindow(object):
         self.main_window.setMinimumSize(QtCore.QSize(742, 679))
         self.main_window.setMaximumSize(QtCore.QSize(742, 679))
         self.main_window.setStyleSheet("")
+        self.images_path = []
 
         self.setupWidgets()
         self.connectSignals()
@@ -54,24 +55,31 @@ class Ui_MainWindow(object):
 
     def openSecondWindow(self):
 
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_SecondWindow(self.folder_path)
-        self.ui.setupUi(self.window)
-        self.window.show()
-        self.main_window.close()
+        if self.images_path !=[]:
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_SecondWindow(self.images_path)
+            self.ui.setupUi(self.window)
+            self.window.show()
+            self.main_window.close()
+        else:
+            self.error_in_folder()
+
 
 
     def selectFolderClicked(self):
-            folder_path = QFileDialog.getExistingDirectory(self.central_widget, "Select Directory")
-            if folder_path:
-                self.folder_path = folder_path
+        folder_path = QFileDialog.getExistingDirectory(self.central_widget, "Select Directory")
+        if folder_path:
+            self.folder_path = folder_path
+            self.images_path = []
+            for root, dirs, filenames in os.walk(folder_path):
+                for filename in filenames:
+                    if filename.endswith(".jpg") or filename.endswith(".png") or filename.endswith(
+                            ".jpeg") or filename.endswith(".JPG") or filename.endswith(".PNG") or filename.endswith(
+                            ".JPEG"):
+                        self.images_path.append(os.path.join(root, filename))
 
-# # Entry point
-# if __name__ == "__main__":
-#     import sys
-#     app = QtWidgets.QApplication(sys.argv)
-#     main_window = QtWidgets.QMainWindow()
-#     ui = Ui_MainWindow()
-#     ui.setupUi(main_window)
-#     main_window.show()
-#     sys.exit(app.exec_())
+
+    def error_in_folder(self):
+        self.select_folder_button.setStyleSheet("background-color: rgb(255,0,0);color: white; border-radius: 10px; font-size: 20px;")
+        self.select_folder_button.setText("Please select folder")
+        self.select_folder_button.setObjectName("select_folder_button")
